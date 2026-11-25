@@ -1,0 +1,33 @@
+# Rotten Tomatoes Analysis - Requirements
+# Install with: pip install -r requirements.txt
+
+# Core Dependencies
+selenium>=4.0.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Database
+sqlalchemy>=2.0.0
+sqlite-utils>=3.35.0
+
+# Statistical Analysis
+scipy>=1.10.0
+statsmodels>=0.14.0
+pingouin>=0.5.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Data Validation
+pandera>=0.14.0
+great-expectations>=0.17.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.65.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
