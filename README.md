@@ -1,51 +1,59 @@
-# Rotten Tomatoes Data Analysis Project
+# Rotten Tomatoes Data Analysis: Scraping, Statistical Analysis & Regression
 
 A comprehensive, production-grade data pipeline for scraping, storing, and analyzing Rotten Tomatoes movie data with proper statistical methods.
 
-## 🎯 What This Improves
+---
 
-### Original Project Weaknesses (Addressed)
+## Problem Statement
 
-| Issue | Original | This Version |
-|-------|----------|--------------|
-| **Data Storage** | CSV only, hard to update | SQLite database with schema |
-| **Reproducibility** | Notebook-only | Re-runnable scripts + tests |
-| **Statistical Analysis** | Basic comparisons | Kruskal-Wallis, effect sizes, multiple comparison corrections |
-| **Confounding** | Decade confounded with genre | Regression controlling for genre, runtime, votes |
-| **Documentation** | Minimal | Data dictionary, requirements.txt, findings summary |
-| **Code Quality** | Monolithic notebook | Modular Python package |
+Movie review analysis requires robust data collection, proper statistical testing (not just basic comparisons), control for confounding variables (decade, genre, runtime), and reproducible methodology. Most tutorials stop at basic CSV analysis without addressing these issues.
 
-## 🚀 Quick Start
+## Objectives
 
-### 1. Install Dependencies
+- Build reproducible web scraping pipeline with Selenium (Shadow DOM support)
+- Store data in structured SQLite database with validation
+- Apply non-parametric statistics (Kruskal-Wallis) for group comparisons
+- Control for confounding via OLS regression with genre, runtime, vote count, decade
+- Provide effect sizes, multiple comparison corrections, and model diagnostics
+- Document everything with data dictionary and findings summary
 
-```bash
-pip install -r requirements.txt
+## Key Features
+
+### Web Scraper (`scraper/`)
+- Selenium-based scraping with Shadow DOM support
+- Cookie consent handling
+- Pagination support
+- Rate limiting to avoid blocking
+- SQLite database storage
+
+### Database Schema (`database/`)
+- `movies` table with full movie metadata
+- `scraping_sessions` table for session tracking
+- `data_quality_checks` table for validation
+
+### Statistical Analysis (`analysis/`)
+- **Kruskal-Wallis H-test** for non-parametric group comparisons
+- **Effect sizes** (ε², η², Cohen's d)
+- **Multiple comparison corrections** (Bonferroni, FDR)
+- **Pairwise comparisons** with Mann-Whitney U tests
+
+### Regression Analysis
+- **OLS regression** with robust standard errors
+- **Control variables**: genre, runtime, vote count, decade
+- **VIF analysis** for multicollinearity
+- **Model diagnostics**: heteroscedasticity, normality
+
+### Visualizations
+- Score distribution histograms and boxplots
+- Genre distribution bar charts
+- Decade comparison with error bars
+- Correlation matrices
+- Regression diagnostic plots
+
+## Project Structure
+
 ```
-
-### 2. Import Existing Data (Optional)
-
-If you have the original CSV data:
-```bash
-python import_existing_data.py rotten_tomatoes_700.csv
-```
-
-### 3. Run Full Analysis
-
-```bash
-python main.py pipeline --csv rotten_tomatoes_700.csv
-```
-
-Or scrape fresh data:
-```bash
-python main.py scrape --records 1500
-python main.py analyze
-```
-
-## 📁 Project Structure
-
-```
-ROTTEN-TOMATOES/
+rotten-tomatoes-analysis/
 ├── scraper/                   # Web scraping module
 │   ├── __init__.py
 │   ├── config.py             # Configuration settings
@@ -71,49 +79,33 @@ ROTTEN-TOMATOES/
 └── README.md                 # This file
 ```
 
-## 📊 Features
+## Quick Start
 
-### Web Scraper
-- Selenium-based scraping with Shadow DOM support
-- Cookie consent handling
-- Pagination support
-- Rate limiting to avoid blocking
-- SQLite database storage
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-### Database Schema
-- `movies` table with full movie metadata
-- `scraping_sessions` table for session tracking
-- `data_quality_checks` table for validation
+### 2. Import Existing Data (Optional)
+If you have the original CSV data:
+```bash
+python import_existing_data.py rotten_tomatoes_700.csv
+```
 
-### Statistical Analysis
-- **Kruskal-Wallis H-test** for non-parametric group comparisons
-- **Effect sizes** (ε², η², Cohen's d)
-- **Multiple comparison corrections** (Bonferroni, FDR)
-- **Pairwise comparisons** with Mann-Whitney U tests
+### 3. Run Full Analysis
+```bash
+python main.py pipeline --csv rotten_tomatoes_700.csv
+```
 
-### Regression Analysis
-- **OLS regression** with robust standard errors
-- **Control variables**: genre, runtime, vote count, decade
-- **VIF analysis** for multicollinearity
-- **Model diagnostics**: heteroscedasticity, normality
+Or scrape fresh data:
+```bash
+python main.py scrape --records 1500
+python main.py analyze
+```
 
-### Visualizations
-- Score distribution histograms and boxplots
-- Genre distribution bar charts
-- Decade comparison with error bars
-- Correlation matrices
-- Regression diagnostic plots
-
-## 📖 Documentation
-
-- **[Data Dictionary](docs/data_dictionary.md)** - Complete field descriptions
-- **[Findings Summary](docs/findings_summary.md)** - Key statistical findings
-- **Generated Charts** - Visual analysis in `docs/charts/`
-
-## 🛠️ Usage Examples
+## Usage Examples
 
 ### Python API
-
 ```python
 from database.schema import DatabaseManager
 from analysis.statistics import StatisticalAnalyzer
@@ -140,7 +132,6 @@ viz.plot_score_distribution()
 ```
 
 ### Command Line
-
 ```bash
 # Scrape 1000 movies
 python main.py scrape --records 1000
@@ -155,14 +146,25 @@ python main.py analyze
 python main.py pipeline --csv rotten_tomatoes_700.csv
 ```
 
-## 📈 Key Findings
+## Key Findings (Verified)
 
 1. **Decade effects are statistically significant** (Kruskal-Wallis p < 0.001)
 2. **Genre significantly impacts scores** - horror films score ~12 points lower
 3. **Longer runtime correlates with higher scores** (+0.12 per minute)
 4. **Survivorship bias present** but controlled in regression analysis
 
-## 🔧 Dependencies
+## Improvements Over Original Project
+
+| Issue | Original | This Version |
+|-------|----------|--------------|
+| Data Storage | CSV only, hard to update | SQLite database with schema |
+| Reproducibility | Notebook-only | Re-runnable scripts + tests |
+| Statistical Analysis | Basic comparisons | Kruskal-Wallis, effect sizes, multiple comparison corrections |
+| Confounding | Decade confounded with genre | Regression controlling for genre, runtime, votes |
+| Documentation | Minimal | Data dictionary, requirements.txt, findings summary |
+| Code Quality | Monolithic notebook | Modular Python package |
+
+## Dependencies
 
 See `requirements.txt` for full list:
 - selenium >= 4.0.0 (web scraping)
@@ -172,14 +174,19 @@ See `requirements.txt` for full list:
 - matplotlib, seaborn, plotly (visualization)
 - pandera (data validation)
 
-## 📝 License
+---
+
+## Author
+
+**SAMALA RAKSHITH BABU**  
+
+**Contact:**  
+- Email: samalarakshithbabu7@gmail.com  
+- LinkedIn: https://www.linkedin.com/in/samala-rakshith-babu/  
+- GitHub: https://github.com/samalarakshithbabu  
+
+---
+
+## License
 
 MIT License - See original project for details.
-
-## 🤝 Contributing
-
-Improvements welcome! Key areas for contribution:
-- Additional statistical tests
-- More visualization types
-- Performance optimizations
-- Data validation enhancements
